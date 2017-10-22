@@ -1,0 +1,104 @@
+﻿<Window x:Name="ventanaPrincipal" x:Class="HojasDeCalculo.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:HojasDeCalculo"
+        mc:Ignorable="d"
+        Title="Hoja de cálculo" Height="350" Width="525" MinWidth="525" MinHeight="350" SizeChanged="ventanaPrincipal_SizeChanged">
+
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_Archivo">
+                <MenuItem x:Name="menuAbrir"  Header="_Abrir" Click="menuAbrir_Click" />
+                <MenuItem x:Name="menuGuardar" Header="_Guardar" Click="menuGuardar_Click" />
+                <MenuItem x:Name="menuNueva" Header="_Nueva" Click="menuNueva_Click" />
+
+            </MenuItem>
+            <MenuItem x:Name="Configuracion" Header="_Configuracion" Click="Configuracion_Click" />
+            <MenuItem Header="Ayuda">
+                <MenuItem x:Name="Manual" Header="Manual" Click="Manual_Click" />
+                <Separator />
+                <MenuItem x:Name="Autor" Header="Sobre el autor" Click="Autor_Click" />
+            </MenuItem>
+        </Menu>
+
+        <Label x:Name="hojas" DockPanel.Dock="Left" BorderThickness="0.5"  MinWidth="120" Width="0" HorizontalContentAlignment="Stretch" Padding="0" Foreground="Black" Background="Transparent" BorderBrush="#FF2D2F32">
+            <StackPanel>
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <ListView Name="dialogoListas" ScrollViewer.CanContentScroll="True" SelectionChanged="ListView_SelectionChanged" BorderThickness="0" IsManipulationEnabled="True" MouseDoubleClick="dialogoListas_MouseDoubleClick" >
+                        <ListView.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Name="listasRenombrar" Header="Renombrar" Click="listasRenombrar_Click"/>
+                                <MenuItem Name="listasBorrar" Header="Borrar" Click="listasBorrar_Click"/>
+                            </ContextMenu>
+                        </ListView.ContextMenu>
+                        <ListView.View>
+                            <GridView AllowsColumnReorder="False" >
+                                <GridViewColumn Header="Hoja" Width="51" DisplayMemberBinding="{Binding Nombre}" />
+                                <GridViewColumn Header="Puntos" Width="45" DisplayMemberBinding="{Binding nPuntos}" />
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </ScrollViewer>
+                <Button Name="dialogoHojas_Nuevo" Margin="1" Click="dialogoHojas_Nuevo_Click" >Nuevo</Button>
+            </StackPanel>
+        </Label>
+
+        <Label x:Name="datos" BorderThickness="0.5" DockPanel.Dock="Bottom"  MinHeight="80" Height="80"  Padding="0" BorderBrush="#FF2D2F32">
+            <DockPanel>
+                <DockPanel Name="cabeceraDatos">
+                    <Button Name="nombreHojaAbierta" DockPanel.Dock="Top" Width="60" Height="40" Margin="5" Padding="0" Click="nombreHojaAbierta_Click" />
+                    <Button Name="actualizarPunto" DockPanel.Dock="Bottom" Margin="4" Click="actualizarPunto_Click">Actualizar</Button>
+                </DockPanel>
+                <DataGrid Name="dialogoPuntos" AutoGenerateColumns="False" HeadersVisibility="Column" Width="80" MaxHeight="290" RenderTransformOrigin="16,0" CanUserAddRows="False" CanUserResizeRows="False" CanUserResizeColumns="False" MinRowHeight="20" CanUserReorderColumns="False" SelectionChanged="dialogoPuntos_SelectionChanged">
+
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="x" Width="25" Binding="{Binding x}"/>
+                        <DataGridTextColumn Header="y" Width="25" Binding="{Binding y}"/>
+                    </DataGrid.Columns>
+                    <DataGrid.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Name="puntoBorrar" Header="Borrar" Click="puntoBorrar_Click" />
+                        </ContextMenu>
+                    </DataGrid.ContextMenu>
+
+                    <DataGrid.Resources>
+                        <Style x:Key="DataGridBase" TargetType="Control">
+                            <Setter Property="LayoutTransform">
+                                <Setter.Value>
+                                    <TransformGroup>
+                                        <RotateTransform Angle="-90" />
+                                        <ScaleTransform ScaleX="1" ScaleY="-1" />
+                                    </TransformGroup>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="TextOptions.TextFormattingMode" Value="Display" />
+                        </Style >
+                        <Style TargetType="DataGridCell" BasedOn="{StaticResource DataGridBase}"/>
+                        <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource DataGridBase}"/>
+                        <Style TargetType="DataGridRowHeader" BasedOn="{StaticResource DataGridBase}"/>
+                    </DataGrid.Resources>
+
+                    <DataGrid.LayoutTransform>
+                        <TransformGroup>
+                            <RotateTransform Angle="90" />
+                            <MatrixTransform Matrix="-1, 0, 0, 1, 0, 0" />
+                        </TransformGroup>
+                    </DataGrid.LayoutTransform>
+                </DataGrid>
+                <Button Name="aniadirPunto" Margin="8" Click="aniadirPunto_Click" >Añadir</Button>
+            </DockPanel>
+        </Label>
+
+        <Label x:Name="grafico" DockPanel.Dock="Top" Background="#FFF0F0F0" ClipToBounds="True">
+            <Canvas Name="lienzo">
+                <Polyline x:Name="grafica" Stroke="Black" Fill="Turquoise"  />
+                <Line x:Name="ejex" />
+                <Line x:Name="ejey" />
+            </Canvas>
+        </Label>
+
+
+    </DockPanel>
+</Window>
